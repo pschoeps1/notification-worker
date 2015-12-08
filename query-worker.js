@@ -19,16 +19,18 @@ var io = socketio.listen(server);
 var Queue = require('firebase-queue'),
     Firebase = require('firebase');
 
-var ref = new Firebase('https://urvirl.firebaseio.com/queue');
-var queue = new Queue(ref, function(data, progress, resolve, reject) {
-  // Read and process task data
+var ref = new Firebase('https://urvirl.firebaseio.com');
+var queueRef = ref.child('queue');
+var messagesRef = ref.child('chat/room-messages');
+
+var options = {
+  'specId': 'sanitize_message'
+};
+
+var sanitizeQueue = new Queue(queueRef, options, function(data, progress, resolve, reject) {
+  // sanitize input message
   console.log(data.message);
 
-  // Do some work
-  progress(50);
+  // pass sanitized message and username along to be fanned out
 
-  // Finish the task asynchronously
-  setTimeout(function() {
-    resolve();
-  }, 1000);
 });
