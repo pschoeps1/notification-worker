@@ -1,1 +1,1 @@
-web: node query-worker.js
+web: node query-worker.js -p $PORT
