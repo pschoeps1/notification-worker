@@ -1,10 +1,10 @@
 {
-  "name": "chat-example",
+  "name": "urvirl-query-worker",
   "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
-  "main": "server.js",
+  "description": "wuery worker with Node.js",
+  "main": "query-worker.js",
   "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "author": "Patrick Schoeps",
   "dependencies": {
     "async": "~0.2.8",
     "express": "~3.2.4",
