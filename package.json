@@ -9,6 +9,7 @@
     "async": "~0.2.8",
     "express": "~3.2.4",
     "firebase": "^2.3.2",
-    "socket.io": "~0.9.14"
+    "socket.io": "~0.9.14",
+    "firebase-queue": "~1.2.1" 
   }
 }
