@@ -48,6 +48,9 @@ http.request(options, function(res) {
 }).end();
 
 queueRef.child("tasks").child(data.signature).remove();
+resolve(data);
+
+
 
 
 
