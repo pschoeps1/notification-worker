@@ -46,7 +46,7 @@ http.request(options, function(res) {
   res.on('data', function (chunk) {
     console.log('BODY: ' + chunk);
     
-    var options = { production: false };
+    var options = { };
     var apnConnection = new apn.Connection(options);
     var jsonData = JSON.parse(chunk);
       for (var i = 0; i < jsonData.users.length; i++) {
