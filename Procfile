@@ -1,0 +1,1 @@
+worker: query-worker.js
