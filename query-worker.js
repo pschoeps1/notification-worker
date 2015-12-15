@@ -57,7 +57,7 @@ http.request(options, function(res) {
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
           note.badge = 3;
           note.sound = "ping.aiff";
-          note.alert = data.name + ": " + data.message;
+          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
           note.payload = {'message': data.message};
 
         apnConnection.pushNotification(note, myDevice);
