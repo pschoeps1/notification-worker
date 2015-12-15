@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "query worker with Node.js",
   "main": "query-worker.js",
-  "scripts": { "start" : "query-worker.js" } }
+  "scripts": { "start": "query-worker.js" },
   "repository": "",
   "author": "Patrick Schoeps",
   "dependencies": {
