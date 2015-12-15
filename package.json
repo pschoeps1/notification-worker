@@ -1,8 +1,9 @@
 {
   "name": "urvirl-query-worker",
   "version": "0.0.0",
-  "description": "wuery worker with Node.js",
+  "description": "query worker with Node.js",
   "main": "query-worker.js",
+  "scripts": { "start" : "query-worker.js" } },
   "repository": "",
   "author": "Patrick Schoeps",
   "dependencies": {
