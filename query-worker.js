@@ -5,6 +5,7 @@ var path = require('path');
 var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
+var apn = require('apn');
 
 //
 // ## SimpleServer `SimpleServer(obj)`
@@ -44,10 +45,31 @@ http.request(options, function(res) {
   res.setEncoding('utf8');
   res.on('data', function (chunk) {
     console.log('BODY: ' + chunk);
+    
+    var options = { };
+    var apnConnection = new apn.Connection(options);
+    var jsonData = JSON.parse(chunk);
+      for (var i = 0; i < jsonData.users.length; i++) {
+
+        var myDevice = new apn.Device(jsonData.users[i]);
+        var note = new apn.Notification();
+
+          note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+          note.badge = 3;
+          note.sound = "ping.aiff";
+          note.alert = data.name + ": " + data.message;
+          note.payload = {'message': data.message};
+
+        apnConnection.pushNotification(note, myDevice);
+      }
+    
   });
 }).end();
 
 queueRef.child("tasks").child(data.signature).remove();
+
+
+
 resolve(data);
 
 
