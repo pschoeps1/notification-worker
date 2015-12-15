@@ -1,1 +1,1 @@
-worker: query-worker.js
+worker: node query-worker.js
