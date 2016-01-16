@@ -55,7 +55,7 @@ http.request(options, function(res) {
         var note = new apn.Notification();
 
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-          note.badge = 3;
+          note.badge = 1;
           note.sound = "ping.aiff";
           note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
           note.payload = {'message': data.message};
