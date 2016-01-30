@@ -6,6 +6,7 @@ var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
 var apn = require('apn');
+var moment = require('moment');
 
 //
 // ## SimpleServer `SimpleServer(obj)`
@@ -25,6 +26,7 @@ var queueRef = ref.child('queue');
 var messagesRef = ref.child('chat/room-messages');
 var userRef = ref.child('chat/users');
 var url = 'mighty-mesa-2159.herokuapp.com'
+
 
 
 
@@ -53,12 +55,13 @@ http.request(options, function(res) {
 
         var myDevice = new apn.Device(jsonData.users[i]);
         var note = new apn.Notification();
+        var time = moment().format('MMMM Do YYYY, h:mm:ss a');
 
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
           note.badge = 1;
           note.sound = "ping.aiff";
-          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
-          note.payload = {'message': data.message};
+          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message + " at" + time;
+          note.payload = {'group_id': jsonData.group_id};
 
         apnConnection.pushNotification(note, myDevice);
       }
