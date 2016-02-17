@@ -62,7 +62,6 @@ http.request(options, function(res) {
           note.sound = "ping.aiff";
           note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
           note.payload = {'group_id': jsonData.group_id};
-          console.log("in apn note")
 
         apnConnection.pushNotification(note, myDevice);
       }
