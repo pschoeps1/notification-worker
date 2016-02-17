@@ -55,13 +55,14 @@ http.request(options, function(res) {
 
         var myDevice = new apn.Device(jsonData.users[i]);
         var note = new apn.Notification();
-        var time = moment().format('MMMM Do YYYY, h:mm:ss a');
+        //var time = moment().format('MMMM Do YYYY, h:mm:ss a');
 
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
           note.badge = 1;
           note.sound = "ping.aiff";
-          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message + " at " + time;
+          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
           note.payload = {'group_id': jsonData.group_id};
+          console.log("in apn note")
 
         apnConnection.pushNotification(note, myDevice);
       }
