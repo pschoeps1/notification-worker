@@ -20,8 +20,9 @@ var io = socketio.listen(server);
 
 var Queue = require('firebase-queue'),
     Firebase = require('firebase');
-
-var ref = new Firebase('https://urvirl.firebaseio.com');
+    
+// to put notifications back up, uncomment this line
+///var ref = new Firebase('https://urvirl.firebaseio.com');
 var queueRef = ref.child('queue');
 var messagesRef = ref.child('chat/room-messages');
 var userRef = ref.child('chat/users');
@@ -47,8 +48,19 @@ http.request(options, function(res) {
   res.setEncoding('utf8');
   res.on('data', function (chunk) {
     console.log('BODY: ' + chunk);
+    var message;
     
-    var options = { };
+    if (data.message) {
+       message = data.message;
+    } else {
+       message = "photo";
+    }
+      
+    var options = { 
+      "cert"           : "cert-dev.pem",
+      "key"            : "key-dev.pem",
+      "production"     : false
+    };
     var apnConnection = new apn.Connection(options);
     var jsonData = JSON.parse(chunk);
       for (var i = 0; i < jsonData.users.length; i++) {
@@ -58,9 +70,9 @@ http.request(options, function(res) {
         //var time = moment().format('MMMM Do YYYY, h:mm:ss a');
 
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-          note.badge = 1;
+          note.badge = 0;
           note.sound = "ping.aiff";
-          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + data.message;
+          note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + message;
           note.payload = {'group_id': jsonData.group_id};
 
         apnConnection.pushNotification(note, myDevice);
