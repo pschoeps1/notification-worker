@@ -22,7 +22,7 @@ var Queue = require('firebase-queue'),
     Firebase = require('firebase');
     
 // to put notifications back up, uncomment this line
-///var ref = new Firebase('https://urvirl.firebaseio.com');
+var ref = new Firebase('https://urvirl.firebaseio.com');
 var queueRef = ref.child('queue');
 var messagesRef = ref.child('chat/room-messages');
 var userRef = ref.child('chat/users');
@@ -57,9 +57,9 @@ http.request(options, function(res) {
     }
       
     var options = { 
-      "cert"           : "cert-dev.pem",
-      "key"            : "key-dev.pem",
-      "production"     : false
+   //   "cert"           : "cert-dev.pem",
+    //  "key"            : "key-dev.pem",
+   //   "production"     : false
     };
     var apnConnection = new apn.Connection(options);
     var jsonData = JSON.parse(chunk);
