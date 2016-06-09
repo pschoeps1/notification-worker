@@ -27,6 +27,7 @@ var queueRef = ref.child('queue');
 var messagesRef = ref.child('chat/room-messages');
 var userRef = ref.child('chat/users');
 var url = 'mighty-mesa-2159.herokuapp.com'
+var unreadMessagesRef = ref.child('chat/users_list')
 
 
 
@@ -57,20 +58,39 @@ http.request(options, function(res) {
     }
       
     var options = { 
-   //   "cert"           : "cert-dev.pem",
-    //  "key"            : "key-dev.pem",
-   //   "production"     : false
+      //"cert"           : "cert-dev.pem",
+      //"key"            : "key-dev.pem",
+      //"production"     : false
     };
     var apnConnection = new apn.Connection(options);
     var jsonData = JSON.parse(chunk);
+      
+      for (var i = 0; i < jsonData.group_users.length; i++) {
+        var user = unreadMessagesRef.child(jsonData.group_users[i]);
+        var group = user.child(data.chat_room);
+        
+        group.child('numUnread').transaction(function(currentVal) {
+          isFinite(currentVal) ||  (currentVal = 0);
+          return currentVal+1;
+        });   
+        
+        user.child('totalNumUnread').transaction(function(currentVal) {
+          isFinite(currentVal) || (currentVal = 0);
+          return currentVal+1;
+        });
+        
+      }
+      
       for (var i = 0; i < jsonData.users.length; i++) {
 
-        var myDevice = new apn.Device(jsonData.users[i]);
+        var myDevice = new apn.Device(jsonData.users[i][0]);
         var note = new apn.Notification();
+        var unreadMessages = 0;
+        unreadMessagesRef.child(jsonData.users[i][1] + "/totalNumUnread").on("value", function(snapshot) { unreadMessages = snapshot.val() });
         //var time = moment().format('MMMM Do YYYY, h:mm:ss a');
 
           note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-          note.badge = 0;
+          note.badge = unreadMessages;
           note.sound = "ping.aiff";
           note.alert = "New message in " + jsonData.group_name + ", " + data.name + ": " + message;
           note.payload = {'group_id': jsonData.group_id};
