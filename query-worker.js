@@ -34,7 +34,7 @@ var unreadMessagesRef = ref.child('chat/users_list')
 
 var Queue = new Queue(queueRef, function(data, progress, resolve, reject) {
   // sanitize input message
-  console.log(data);
+  //console.log(data);
   
  var options = {
   host: url,
@@ -70,16 +70,32 @@ http.request(options, function(res) {
         var group = user.child(data.chat_room);
         
         group.child('numUnread').transaction(function(currentVal) {
-          isFinite(currentVal) ||  (currentVal = 0);
-          return currentVal+1;
-        });   
-        
-        user.child('totalNumUnread').transaction(function(currentVal) {
           isFinite(currentVal) || (currentVal = 0);
           return currentVal+1;
+        });  
+        
+        var masterCounter = 0;
+        user.once("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+            var childData = childSnapshot.val();
+            var count = childData['numUnread'];
+            if(count == 0 || isNaN(parseFloat(count))) {
+              //console.log("false")
+            }
+            else {
+              masterCounter += count;
+            }
+          });
+          updateMasterCounter(masterCounter);
         });
         
+        
       }
+      
+      
+        function updateMasterCounter(masterCounter) {
+          user.child('totalNumUnread').set(masterCounter);
+        }
       
       for (var i = 0; i < jsonData.users.length; i++) {
 
@@ -96,6 +112,7 @@ http.request(options, function(res) {
           note.payload = {'group_id': jsonData.group_id};
 
         apnConnection.pushNotification(note, myDevice);
+        console.log('notification pushed');
       }
     
   });
